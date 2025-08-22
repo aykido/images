@@ -1,5 +1,116 @@
 <!doctype html>
-<meta charset="utf-8">
-<title>Codex Test</title>
-<h1>Merhaba Ayki — Codex test</h1>
-<p>Bu repo Codex entegrasyonu için başlangıç commit'idir.</p>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <title>Not Açıklama Sitesi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 6px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    .note-title {
+      font-weight: bold;
+    }
+    .note-explanation {
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Not Açıklama Sitesi</h1>
+    <form id="note-form">
+      <label>
+        Başlık
+        <input type="text" id="title" required>
+      </label>
+      <label>
+        Açıklama
+        <textarea id="explanation" required></textarea>
+      </label>
+      <button type="submit">Notu Ekle</button>
+    </form>
+    <ul id="notes"></ul>
+  </div>
+
+  <script>
+    const form = document.getElementById('note-form');
+    const titleInput = document.getElementById('title');
+    const explanationInput = document.getElementById('explanation');
+    const notesList = document.getElementById('notes');
+
+    const notes = JSON.parse(localStorage.getItem('notes') || '[]');
+    notes.forEach(addNote);
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const note = {
+        title: titleInput.value.trim(),
+        explanation: explanationInput.value.trim()
+      };
+      if (!note.title || !note.explanation) return;
+      notes.push(note);
+      localStorage.setItem('notes', JSON.stringify(notes));
+      addNote(note);
+      form.reset();
+    });
+
+    function addNote(note) {
+      const li = document.createElement('li');
+      const titleEl = document.createElement('div');
+      titleEl.className = 'note-title';
+      titleEl.textContent = note.title;
+      const explanationEl = document.createElement('div');
+      explanationEl.className = 'note-explanation';
+      explanationEl.textContent = note.explanation;
+      li.appendChild(titleEl);
+      li.appendChild(explanationEl);
+      notesList.appendChild(li);
+    }
+  </script>
+</body>
+</html>
